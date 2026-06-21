@@ -9,6 +9,10 @@ from alembic import context
 from app.core.config import settings
 from app.db.base import Base
 
+# Import all models so SQLAlchemy registers their tables in Base.metadata
+import app.models.do_not_scan  # noqa: F401
+import app.models.audit_log    # noqa: F401
+
 config = context.config
 
 config.set_main_option("sqlalchemy.url", settings.database_url)
