@@ -1,9 +1,14 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 
 from app.api.v1.router import api_router
 from app.core.config import settings
+from app.core.exceptions import AppError
+from app.core.rate_limiter import limiter
 
 app = FastAPI(
     title="Website Trust & Security Advisor API",
@@ -13,6 +18,11 @@ app = FastAPI(
     redoc_url=None,
     openapi_url="/api/openapi.json" if settings.app_env == "development" else None,
 )
+
+# Rate limiter state
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
@@ -31,6 +41,15 @@ async def add_security_headers(request: Request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Cache-Control"] = "no-store"
     return response
+
+
+@app.exception_handler(AppError)
+async def app_error_handler(request: Request, exc: AppError) -> JSONResponse:
+    """Convert all AppError subclasses to a consistent JSON error envelope."""
+    body: dict = {"error": exc.error_code, "message": exc.message}
+    if exc.detail:
+        body["detail"] = exc.detail
+    return JSONResponse(status_code=exc.status_code, content=body)
 
 
 app.include_router(api_router, prefix="/api/v1")
