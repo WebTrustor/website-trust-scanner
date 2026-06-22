@@ -19,3 +19,10 @@ class SiteDetail(BaseModel):
     updated_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class SiteVerificationInfo(BaseModel):
+    domain: str
+    txt_record_name: str
+    txt_record_value: str
+    status: SiteStatus
