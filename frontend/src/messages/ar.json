@@ -78,6 +78,58 @@
       }
     }
   },
+  "fix_plan": {
+    "title": "خطة الإصلاح",
+    "no_issues": "لم نكتشف مشاكل واضحة في هذا الفحص. راجع تفاصيل فحوصات الأمان أدناه.",
+    "priority": {
+      "critical": "حرج",
+      "high": "عالية",
+      "medium": "متوسطة",
+      "warning": "تحذير"
+    },
+    "copy_for_developer": "نسخ للمطور",
+    "copied": "تم النسخ!",
+    "why_label": "لماذا تهم؟",
+    "how_label": "كيف تصلحها؟",
+    "issues": {
+      "no_https": {
+        "title": "لا يوجد اتصال HTTPS",
+        "why": "الاتصال بين المتصفح والخادم غير مشفر. قد يرى الزوار تحذيرات أمان في متصفحاتهم، والبيانات المُرسَلة غير محمية.",
+        "how": "فعّل شهادة SSL من لوحة تحكم الاستضافة وأعِد توجيه جميع طلبات HTTP إلى HTTPS. يُنصح باستخدام Let's Encrypt إن كان مزوّد الاستضافة يدعمه.",
+        "developer_text": "[CRITICAL] Enable HTTPS (SSL) on the server.\nRedirect all HTTP traffic to HTTPS (301 redirect).\nConsider Let's Encrypt for a free certificate.\nVerify with your developer before deploying."
+      },
+      "ssl_invalid": {
+        "title": "شهادة SSL غير صالحة",
+        "why": "لم يتمكن الفحص من التحقق من شهادة SSL للموقع. قد تعرض المتصفحات خطأ أمانياً للزوار، مما قد يقلل الثقة بالموقع بشكل كبير.",
+        "how": "جدّد أو أعِد تثبيت شهادة SSL من مزوّد الاستضافة. تأكد من أن الشهادة تتطابق مع اسم النطاق ولم تنتهِ صلاحيتها.",
+        "developer_text": "[CRITICAL] SSL certificate is invalid or could not be verified.\nRenew the certificate from your hosting provider.\nEnsure the certificate matches the correct domain.\nTest using: openssl s_client -connect yourdomain.com:443"
+      },
+      "ssl_expiry_soon": {
+        "title": "شهادة SSL تنتهي قريباً",
+        "why": "شهادة SSL تقترب من تاريخ انتهاء صلاحيتها. بعد انتهائها، سيرى الزوار تحذيرات أمان وقد لا يتمكنون من الوصول للموقع.",
+        "how": "جدّد الشهادة قبل انتهاء صلاحيتها. إذا كنت تستخدم Let's Encrypt، فعّل التجديد التلقائي. تواصل مع مزوّد الاستضافة إذا كان التجديد يدويًا.",
+        "developer_text": "[HIGH] SSL certificate expires soon.\nRenew the certificate immediately to avoid browser warnings.\nIf using Let's Encrypt, enable auto-renewal (certbot renew --dry-run).\nSet a calendar reminder for future renewals."
+      },
+      "no_hsts": {
+        "title": "إعداد HSTS غير مُفعَّل",
+        "why": "بدون HSTS (HTTP Strict Transport Security)، قد تسمح بعض المتصفحات باتصالات غير مشفرة حتى عند توفر HTTPS. يُنصح بتفعيله للحد من بعض أنواع المخاطر.",
+        "how": "أضف ترويسة Strict-Transport-Security لإعدادات الخادم. مثال: Strict-Transport-Security: max-age=31536000; includeSubDomains. راجع توثيق الاستضافة أو استشر المطور للطريقة الصحيحة.",
+        "developer_text": "[MEDIUM] HSTS header is missing.\nAdd to server config:\nStrict-Transport-Security: max-age=31536000; includeSubDomains\nFor Apache: add to .htaccess or httpd.conf\nFor Nginx: add to server block\nTest at: https://hstspreload.org"
+      },
+      "weak_headers": {
+        "title": "ترويسات الأمان غير مكتملة",
+        "why": "ترويسة أمان واحدة أو أكثر غير موجودة. تساعد هذه الترويسات المتصفحات في حماية المستخدمين من ثغرات شائعة مثل حقن المحتوى والـ clickjacking.",
+        "how": "راجع الترويسات الناقصة وأضفها لإعدادات الخادم أو CDN. الترويسات الشائعة للمراجعة: Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy. استشر المطور للقيم المناسبة.",
+        "developer_text": "[MEDIUM] One or more security headers are missing.\nCheck and add the following where applicable:\n- Content-Security-Policy\n- X-Frame-Options: DENY\n- X-Content-Type-Options: nosniff\n- Referrer-Policy: strict-origin-when-cross-origin\n- Permissions-Policy\nTest at: https://securityheaders.com"
+      },
+      "bad_reputation": {
+        "title": "النطاق مُبلَّغ عنه في فحص السمعة",
+        "why": "ظهر هذا النطاق في أحد مصادر السمعة التي ترصد المواقع المشبوهة أو الضارة. قد يؤثر ذلك على ثقة المستخدمين وإمكانية وصولهم للموقع.",
+        "how": "افحص النطاق في خدمات السمعة لفهم سبب التبليغ. إذا كان التبليغ غير صحيح، اتبع إجراء الاعتراض لدى الجهة المعنية. إذا تعرّض الموقع لاختراق سابق، نظّفه بالكامل قبل طلب المراجعة.",
+        "developer_text": "[WARNING] Domain has a negative reputation flag.\nCheck reputation at: https://www.virustotal.com\nIf incorrectly flagged, submit a dispute to the reporting service.\nIf the site was compromised, clean it thoroughly before requesting review.\nMonitor reputation regularly going forward."
+      }
+    }
+  },
   "errors": {
     "invalid_url": "الرابط المُدخَل غير صالح. يرجى التحقق من الصيغة.",
     "ssrf_blocked": "لا يمكن فحص هذا الرابط.",
