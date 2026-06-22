@@ -60,7 +60,7 @@ async def run_owner_scan(
         actor_role=current_user.role.value,
         resource_type="site",
         resource_id=str(site.id),
-        details={"trust_score": report["trust_score"], "domain": site.domain},
+        details={"trust_score": report["trust_score"]},
     )
 
     return ScanResultDetail.model_validate(result)

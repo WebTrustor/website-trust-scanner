@@ -393,7 +393,7 @@ async def test_owner_do_not_scan_audit_uses_owner_fields():
     logged: list[dict] = []
 
     async def capture_log(db, *, action, outcome, actor_id=None, actor_role=None,
-                          resource_type=None, resource_id=None, **kwargs):
+                          resource_type=None, resource_id=None, details=None, **kwargs):
         logged.append({
             "action": action,
             "outcome": outcome,
@@ -401,6 +401,7 @@ async def test_owner_do_not_scan_audit_uses_owner_fields():
             "actor_role": actor_role,
             "resource_type": resource_type,
             "resource_id": resource_id,
+            "details": details,
         })
 
     with (
@@ -418,6 +419,8 @@ async def test_owner_do_not_scan_audit_uses_owner_fields():
     assert entry["actor_role"] == "owner"
     assert entry["resource_type"] == "site"
     assert entry["resource_id"] == "site-abc"
+    # details must not expose the raw domain value
+    assert entry.get("details", {}).get("reason") == "do_not_scan"
 
 
 # ── SSRF block prevents scanner ───────────────────────────────────────────────

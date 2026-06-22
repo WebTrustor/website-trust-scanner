@@ -171,11 +171,11 @@ async def run_owner_trust_scan(
 
     Raises AppError subclasses on security violations.
     """
-    normalized_domain = domain.lower()
+    clean_domain = domain.strip().lower()
 
     # ── Step 2: Do Not Scan — before any DNS resolution ──────────────────────
     dns_row = await db.execute(
-        select(DoNotScan).where(func.lower(DoNotScan.domain) == normalized_domain)
+        select(DoNotScan).where(func.lower(DoNotScan.domain) == clean_domain)
     )
     if dns_row.scalar_one_or_none() is not None:
         await log_event(
@@ -186,12 +186,12 @@ async def run_owner_trust_scan(
             actor_role=actor_role,
             resource_type="site",
             resource_id=site_id,
-            details={"domain": domain},
+            details={"reason": "do_not_scan"},
         )
         raise DomainBlockedError()
 
     # ── Step 3: URL validation / SSRF (DNS resolution happens here) ───────────
-    clean_url = validate_url(f"https://{domain}")
+    clean_url = validate_url(f"https://{clean_domain}")
 
     # ── Step 4: Extract validated hostname — guard if empty ───────────────────
     validated_hostname = urlparse(clean_url).hostname or ""
@@ -201,7 +201,7 @@ async def run_owner_trust_scan(
         )
 
     # ── Step 4b: Second Do Not Scan — only if hostname changed after DNS ───────
-    if validated_hostname != normalized_domain:
+    if validated_hostname != clean_domain:
         dns_row2 = await db.execute(
             select(DoNotScan).where(
                 func.lower(DoNotScan.domain) == validated_hostname.lower()
@@ -216,13 +216,13 @@ async def run_owner_trust_scan(
                 actor_role=actor_role,
                 resource_type="domain",
                 resource_id=validated_hostname,
-                details={"domain": domain},
+                details={"reason": "do_not_scan"},
             )
             raise DomainBlockedError()
 
     # ── Step 5: Scan policy check ─────────────────────────────────────────────
     check_scan_allowed(
-        domain=domain,
+        domain=clean_domain,
         scan_type=ScanType.PUBLIC_TRUST,
         is_on_do_not_scan_list=False,
     )
