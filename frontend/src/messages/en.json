@@ -261,5 +261,10 @@
       "email_taken": "An account with this email already exists.",
       "generic": "Something went wrong. Please try again."
     }
+  },
+  "owner_scan": {
+    "not_found": "Scan not found.",
+    "error": "Could not load this scan. Please try again.",
+    "unauthorized": "Please log in to view this scan."
   }
 }
