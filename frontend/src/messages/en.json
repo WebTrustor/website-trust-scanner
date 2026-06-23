@@ -78,6 +78,58 @@
       }
     }
   },
+  "fix_plan": {
+    "title": "Fix Plan",
+    "no_issues": "No issues found in this scan. Review the security checks below for details.",
+    "priority": {
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "warning": "Warning"
+    },
+    "copy_for_developer": "Copy for developer",
+    "copied": "Copied!",
+    "why_label": "Why it matters",
+    "how_label": "How to fix",
+    "issues": {
+      "no_https": {
+        "title": "HTTPS not detected",
+        "why": "The connection between the browser and server is unencrypted. Visitors may see security warnings in their browser, and data in transit is not protected.",
+        "how": "Enable an SSL certificate via your hosting provider and redirect all HTTP traffic to HTTPS. Consider using Let's Encrypt if your host supports it.",
+        "developer_text": "[CRITICAL] Enable HTTPS (SSL) on the server.\nRedirect all HTTP traffic to HTTPS (301 redirect).\nConsider Let's Encrypt for a free certificate.\nVerify with your developer before deploying."
+      },
+      "ssl_invalid": {
+        "title": "SSL certificate is invalid",
+        "why": "The site's SSL certificate could not be verified. Browsers may block visitors with a security error, which can significantly reduce trust.",
+        "how": "Renew or reinstall the SSL certificate from your hosting provider. Ensure the certificate matches the domain name and has not expired.",
+        "developer_text": "[CRITICAL] SSL certificate is invalid or could not be verified.\nRenew the certificate from your hosting provider.\nEnsure the certificate matches the correct domain.\nTest using: openssl s_client -connect yourdomain.com:443"
+      },
+      "ssl_expiry_soon": {
+        "title": "SSL certificate expires soon",
+        "why": "The SSL certificate is approaching its expiry date. Once it expires, visitors will see security warnings and the site may become inaccessible.",
+        "how": "Renew the SSL certificate before it expires. If using Let's Encrypt, set up automatic renewal. Contact your hosting provider if renewal is manual.",
+        "developer_text": "[HIGH] SSL certificate expires soon.\nRenew the certificate immediately to avoid browser warnings.\nIf using Let's Encrypt, enable auto-renewal (certbot renew --dry-run).\nSet a calendar reminder for future renewals."
+      },
+      "no_hsts": {
+        "title": "HSTS header not configured",
+        "why": "Without HSTS (HTTP Strict Transport Security), browsers may allow unencrypted connections even when HTTPS is available. This may reduce protection against certain network-level attacks.",
+        "how": "Add the Strict-Transport-Security header to your server configuration. Example: Strict-Transport-Security: max-age=31536000; includeSubDomains. Consult your developer or hosting documentation for the correct method.",
+        "developer_text": "[MEDIUM] HSTS header is missing.\nAdd to server config:\nStrict-Transport-Security: max-age=31536000; includeSubDomains\nFor Apache: add to .htaccess or httpd.conf\nFor Nginx: add to server block\nTest at: https://hstspreload.org"
+      },
+      "weak_headers": {
+        "title": "Security headers are incomplete",
+        "why": "One or more recommended security headers are missing. These headers help browsers protect users from common web vulnerabilities such as content injection and clickjacking.",
+        "how": "Review which headers are missing and add them to your server or CDN configuration. Common headers to check: Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy. Consult your developer for the correct values.",
+        "developer_text": "[MEDIUM] One or more security headers are missing.\nCheck and add the following where applicable:\n- Content-Security-Policy\n- X-Frame-Options: DENY\n- X-Content-Type-Options: nosniff\n- Referrer-Policy: strict-origin-when-cross-origin\n- Permissions-Policy\nTest at: https://securityheaders.com"
+      },
+      "bad_reputation": {
+        "title": "Domain flagged in reputation check",
+        "why": "This domain appeared in one or more reputation sources that track suspicious or potentially harmful sites. This may affect user trust and deliverability of emails from this domain.",
+        "how": "Check the domain against reputation services to understand why it was flagged. If the flag is incorrect, follow the dispute process for the relevant service. If the flag appears valid, review recent changes to the site and address the underlying cause before requesting a review.",
+        "developer_text": "[WARNING] Domain has a negative reputation flag.\nReview why the site was flagged, resolve the underlying issue, check for unwanted changes, and request a reputation review from the relevant providers."
+      }
+    }
+  },
   "errors": {
     "invalid_url": "The entered URL is invalid. Please check the format.",
     "ssrf_blocked": "This URL cannot be scanned.",
