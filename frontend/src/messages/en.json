@@ -276,5 +276,13 @@
     "status_pending": "Pending Verification",
     "status_suspended": "Suspended",
     "view_scans": "View Scans"
+  },
+  "owner_scans_list": {
+    "title": "Scan History",
+    "unauthorized": "Please log in to view scans.",
+    "not_found": "Site not found.",
+    "error": "Could not load scans. Please try again.",
+    "empty": "No scans found for this site.",
+    "view_details": "View Details"
   }
 }
