@@ -125,8 +125,8 @@
       "bad_reputation": {
         "title": "النطاق مُبلَّغ عنه في فحص السمعة",
         "why": "ظهر هذا النطاق في أحد مصادر السمعة التي ترصد المواقع المشبوهة أو الضارة. قد يؤثر ذلك على ثقة المستخدمين وإمكانية وصولهم للموقع.",
-        "how": "افحص النطاق في خدمات السمعة لفهم سبب التبليغ. إذا كان التبليغ غير صحيح، اتبع إجراء الاعتراض لدى الجهة المعنية. إذا تعرّض الموقع لاختراق سابق، نظّفه بالكامل قبل طلب المراجعة.",
-        "developer_text": "[WARNING] Domain has a negative reputation flag.\nCheck reputation at: https://www.virustotal.com\nIf incorrectly flagged, submit a dispute to the reporting service.\nIf the site was compromised, clean it thoroughly before requesting review.\nMonitor reputation regularly going forward."
+        "how": "افحص النطاق في خدمات السمعة لفهم سبب التبليغ. إذا كان التبليغ غير صحيح، اتبع إجراء الاعتراض لدى الجهة المعنية. إذا كان التبليغ صحيحًا، راجع التغييرات الأخيرة على الموقع وعالج السبب الأساسي قبل طلب مراجعة السمعة.",
+        "developer_text": "[WARNING] Domain has a negative reputation flag.\nReview why the site was flagged, resolve the underlying issue, check for unwanted changes, and request a reputation review from the relevant providers."
       }
     }
   },

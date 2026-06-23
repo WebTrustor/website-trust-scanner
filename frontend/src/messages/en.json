@@ -125,8 +125,8 @@
       "bad_reputation": {
         "title": "Domain flagged in reputation check",
         "why": "This domain appeared in one or more reputation sources that track suspicious or potentially harmful sites. This may affect user trust and deliverability of emails from this domain.",
-        "how": "Check the domain against reputation services to understand the cause. If the flag is incorrect, follow the dispute process for the relevant service. If the site was recently recovered from a compromise, request a review.",
-        "developer_text": "[WARNING] Domain has a negative reputation flag.\nCheck reputation at: https://www.virustotal.com\nIf incorrectly flagged, submit a dispute to the reporting service.\nIf the site was compromised, clean it thoroughly before requesting review.\nMonitor reputation regularly going forward."
+        "how": "Check the domain against reputation services to understand why it was flagged. If the flag is incorrect, follow the dispute process for the relevant service. If the flag appears valid, review recent changes to the site and address the underlying cause before requesting a review.",
+        "developer_text": "[WARNING] Domain has a negative reputation flag.\nReview why the site was flagged, resolve the underlying issue, check for unwanted changes, and request a reputation review from the relevant providers."
       }
     }
   },
