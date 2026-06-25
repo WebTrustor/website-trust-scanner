@@ -121,7 +121,14 @@ export default async function AdminLeadsPage({
               <tbody className="divide-y divide-slate-800">
                 {leads.map((lead) => (
                   <tr key={lead.id} className="bg-slate-950 hover:bg-slate-900 transition-colors">
-                    <td className="px-4 py-3 font-mono text-slate-200">{lead.domain}</td>
+                    <td className="px-4 py-3 font-mono">
+                      <Link
+                        href={`/admin/leads/${lead.id}`}
+                        className="text-blue-400 hover:text-blue-300 transition-colors"
+                      >
+                        {lead.domain}
+                      </Link>
+                    </td>
                     <td className="px-4 py-3 text-slate-300">
                       {t(`status.${lead.status}` as Parameters<typeof t>[0])}
                     </td>
