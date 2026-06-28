@@ -108,6 +108,24 @@ function DecisionCard({
   )
 }
 
+function DangerBanner({ t }: { t: ReturnType<typeof useTranslations> }) {
+  return (
+    <div className="bg-red-950/40 border border-red-800/60 rounded-2xl p-5 flex items-start gap-3.5">
+      <div className="flex-shrink-0 w-9 h-9 rounded-full bg-red-500/20 flex items-center justify-center mt-0.5">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M9 3L16.5 15H1.5L9 3Z" stroke="#f87171" strokeWidth="1.5" strokeLinejoin="round"/>
+          <path d="M9 8V11" stroke="#f87171" strokeWidth="1.75" strokeLinecap="round"/>
+          <circle cx="9" cy="13.5" r="0.75" fill="#f87171"/>
+        </svg>
+      </div>
+      <div className="space-y-1">
+        <p className="text-red-400 font-semibold text-sm">{t('results.danger_banner.title')}</p>
+        <p className="text-slate-400 text-xs leading-relaxed">{t('results.danger_banner.body')}</p>
+      </div>
+    </div>
+  )
+}
+
 export default function TrustResult({
   report,
   onReset,
@@ -126,6 +144,8 @@ export default function TrustResult({
     { key: 'personal_data', verdict: getVerdict(report.recommendations.safe_for_payment, trust_level, checks.reputation) },
   ]
 
+  const isDangerous = trust_level === 'low' || checks.reputation === 'flagged'
+
   const headersLabel = t('results.headers_score', {
     score: report.checks.headers_score,
     max: report.checks.headers_max,
@@ -143,7 +163,7 @@ export default function TrustResult({
         </p>
 
         {/* Score ring */}
-        <div className="flex flex-col items-center mb-6">
+        <div className="flex flex-col items-center mb-6" dir="ltr">
           <div
             className={`w-32 h-32 rounded-full ring-4 ring-offset-2 ring-offset-slate-900 ${colors.ring} ${colors.bg}
                         flex flex-col items-center justify-center mb-3`}
@@ -159,7 +179,7 @@ export default function TrustResult({
         </div>
 
         {/* Score basis summary */}
-        <p className="text-slate-600 text-xs text-center leading-relaxed max-w-xs mx-auto">
+        <p className="text-slate-600 text-xs text-center leading-relaxed max-w-xs mx-auto" dir="ltr">
           {t('results.score_based_on', {
             https: report.checks.https ? '✓' : '✗',
             ssl: report.checks.ssl_valid ? '✓' : '✗',
@@ -180,6 +200,9 @@ export default function TrustResult({
         )}
       </div>
 
+      {/* Danger banner */}
+      {isDangerous && <DangerBanner t={t} />}
+
       {/* Usage Decision */}
       <div className="bg-slate-900 border border-slate-700/80 rounded-2xl p-5 shadow-xl space-y-3">
         <p className="text-slate-400 text-xs uppercase tracking-wider font-medium">
@@ -190,6 +213,12 @@ export default function TrustResult({
             <DecisionCard key={key} decisionKey={key} verdict={verdict} t={t} />
           ))}
         </div>
+        {isDangerous && (
+          <div className="pt-3 border-t border-slate-800">
+            <p className="text-xs font-semibold text-slate-400 mb-1">{t('results.what_to_do.title')}</p>
+            <p className="text-xs text-slate-500 leading-relaxed">{t('results.what_to_do.danger')}</p>
+          </div>
+        )}
       </div>
 
       {/* Security Checks */}

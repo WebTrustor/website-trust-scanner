@@ -230,6 +230,28 @@ export default function ScanForm({ apiUrl }: { apiUrl: string }) {
           )
         })}
       </div>
+
+      {/* How it works */}
+      <div className="mt-7 space-y-3">
+        <p className="text-slate-600 text-xs uppercase tracking-wider font-medium text-center">
+          {t('home.how_it_works.title')}
+        </p>
+        <div className="flex flex-col sm:flex-row gap-2">
+          {([0, 1, 2] as const).map((i) => (
+            <div
+              key={i}
+              className="flex-1 flex items-start gap-2.5 bg-slate-900/50 border border-slate-800/60 rounded-xl px-3 py-3"
+            >
+              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-700/50 text-blue-300 text-xs flex items-center justify-center font-bold mt-0.5">
+                {i + 1}
+              </span>
+              <span className="text-slate-500 text-xs leading-relaxed">
+                {t(`home.how_it_works.steps.${i}` as Parameters<typeof t>[0])}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

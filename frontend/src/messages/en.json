@@ -23,7 +23,15 @@
       "safe_for_account": "Safe for Account",
       "safe_for_payment": "Safe for Payment"
     },
-    "coming_soon": "Under development — Launching soon"
+    "coming_soon": "Under development — Launching soon",
+    "how_it_works": {
+      "title": "How it works",
+      "steps": [
+        "Enter any website URL — no account needed",
+        "We check HTTPS, SSL, security headers, and domain reputation",
+        "Get an instant trust score and a clear usage decision"
+      ]
+    }
   },
   "results": {
     "trust_score": "Trust Score",
@@ -46,6 +54,14 @@
     },
     "new_scan": "Check another website",
     "score_based_on": "HTTPS {https} · SSL {ssl} · Headers {headers} · Reputation: {reputation}",
+    "danger_banner": {
+      "title": "This site shows risk indicators",
+      "body": "All checks returned a negative result. We strongly advise against browsing, creating an account, entering payment details, or sharing personal data on this site."
+    },
+    "what_to_do": {
+      "title": "What should you do now?",
+      "danger": "Avoid visiting this site. If you already entered any data there, consider changing your passwords and monitoring your accounts for unusual activity."
+    },
     "decision": {
       "title": "Usage Decision",
       "verdict": {
@@ -266,6 +282,8 @@
     "submitting": "Please wait…",
     "show_password": "Show password",
     "hide_password": "Hide password",
+    "forgot_password": "Forgot password?",
+    "forgot_password_coming_soon": "Password reset will be available before the public launch of this product.",
     "errors": {
       "invalid_credentials": "Incorrect email or password.",
       "account_locked": "Account is temporarily locked. Try again in 15 minutes.",

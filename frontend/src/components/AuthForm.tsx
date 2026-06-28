@@ -105,7 +105,17 @@ function AuthFormInner({ mode }: { mode: Mode }) {
               </div>
 
               <div>
-                <label className="block text-sm text-slate-400 mb-1.5">{t('password')}</label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-sm text-slate-400">{t('password')}</label>
+                  {mode === 'login' && (
+                    <Link
+                      href="/forgot-password"
+                      className="text-xs text-slate-500 hover:text-blue-400 transition-colors"
+                    >
+                      {t('forgot_password')}
+                    </Link>
+                  )}
+                </div>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
