@@ -36,7 +36,7 @@ Resolve all known blockers documented in `RC1_REVIEW_REPORT.md §7` so that the 
 | HTTPS at load balancer | Enforce TLS termination. Confirm `secure=True` cookie flag is active (already conditional on `APP_ENV != development`). |
 | CORS origin restriction | Confirm `ALLOWED_ORIGINS` in production is set to the exact frontend domain, not `*`. |
 | `passlib` + `bcrypt 4.x` mismatch | Resolve dependency version conflict that causes a warning at startup. Authentication works but the warning should be eliminated before production. |
-| `middleware` → `proxy` rename | Next.js 16 deprecated the `middleware` file convention. Rename `frontend/src/middleware.ts` → `frontend/src/proxy.ts`. No logic change. |
+| `middleware` → `proxy` rename | ✅ Done — `frontend/src/proxy.ts` (renamed from `middleware.ts` in Release 1.0.1). |
 | Terms of Service + Privacy Policy | Pages or external links must be present before public registration is opened. |
 | Data retention policy enforcement | `DATA_RETENTION_POLICY.md` must be enforced in the production database configuration. |
 
@@ -56,7 +56,7 @@ Resolve all known blockers documented in `RC1_REVIEW_REPORT.md §7` so that the 
 - [ ] HTTPS active, cookies flagged `secure=True`
 - [ ] No `.env.example` default values in production
 - [ ] `passlib` warning eliminated from logs
-- [ ] `middleware` deprecation warning eliminated
+- [x] `middleware` deprecation warning eliminated (renamed to `proxy.ts` in Release 1.0.1)
 
 ### Risks
 
@@ -69,7 +69,7 @@ Resolve all known blockers documented in `RC1_REVIEW_REPORT.md §7` so that the 
 ### Suggested Execution Order
 
 1. CVE verification (read-only first — may close blocker without code change)
-2. `passlib` + `middleware` fixes (low-risk, isolated)
+2. `passlib` + `middleware` fixes (low-risk, isolated) — ✅ both done in Release 1.0.1
 3. Per-domain rate limit (backend only, tested in isolation)
 4. Real reputation provider (backend only, feature-flagged via `REPUTATION_PROVIDER` env var)
 5. Infra checklist (secrets, HTTPS, CORS) — environment configuration, not code
