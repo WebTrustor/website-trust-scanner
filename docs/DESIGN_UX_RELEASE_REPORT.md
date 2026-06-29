@@ -208,3 +208,113 @@ Minimum 375px width is supported by all existing flex layouts (no changes needed
 | Bilingual review | Arabic strings carry over from 1.0.1; a bilingual user review is recommended before beta |
 | Admin pages header | Admin pages retain their existing no-header layout; not in scope for 1.1 |
 | Favicon | Still the default Next.js favicon; custom favicon deferred to a dedicated design task |
+
+---
+
+## 16. Product Polish Addendum — Post-Critique Execution (2026-06-29)
+
+**Branch:** `release/1.1-design-ux-refresh`  
+**Type:** Frontend + docs only. No backend, API, auth, scanner, scoring, or database changes.  
+**New dependencies added:** None.
+
+---
+
+### 16.1 What Was Polished
+
+This addendum covers two focused commits applied after the initial 1.1 Design & UX Refresh, driven by a structured UX critique conducted on the live build.
+
+---
+
+### 16.2 Messaging & Homepage
+
+| File | Change |
+|---|---|
+| `en.json` + `ar.json` → `home.title` | Changed from "Is this website safe?" to "Is this website safe to use?" — action-oriented framing |
+| `en.json` + `ar.json` → `home.subtitle` | Changed from generic "get an instant assessment" to "Before you share personal data, pay online, or create an account — check this site's trust indicators first" — positions the tool at the decision moment |
+| `en.json` + `ar.json` → `home.disclaimer` | Rewritten to be warm and specific: "We check visible, public security signals only. No intrusive tests. No penetration testing. No data stored." |
+| `en.json` + `ar.json` → `home.how_it_works.steps` | Step 2 and 3 clarified to distinguish visible/public signals from intrusive scanning; step 3 now says "plain-language usage decision" |
+| `en.json` + `ar.json` → `home.trust_signals.note` | New key. A single paragraph below "How it works" explaining this is an advisor, not an intrusive scanner, with no data stored. Displayed in `ScanForm.tsx`. |
+| `ScanForm.tsx` | Added `trust_signals.note` paragraph below the how-it-works steps |
+
+---
+
+### 16.3 Results Page — Advisor Tone
+
+| File | Change |
+|---|---|
+| `en.json` + `ar.json` → `results.danger_banner` | Title changed from "This site shows risk indicators" to "Risk indicators detected". Body shortened and sharpened. New `checklist` array with 4 actionable bullet items: no personal data, no payment, no account, check link source. |
+| `TrustResult.tsx` → `DangerBanner` | Expanded to render the checklist as a styled bullet list below the banner text |
+| `en.json` + `ar.json` → `results.what_this_means` | New namespace with `title` + keys for all four trust levels (`high`, `good`, `medium`, `low`). Explains the result in plain language without false guarantees. |
+| `en.json` + `ar.json` → `results.what_to_do` | Added `high`, `good`, `medium` keys to complement the existing `danger` key. Each level has a context-appropriate next action. |
+| `TrustResult.tsx` → `GuidanceSection` | New component shown for **all** trust levels (not only dangerous sites). Two-part card: "What this result means" + "What should you do now?" Uses `what_this_means.{level}` and `what_to_do.{level or danger}`. Appears after the decision cards, before security checks. |
+| `TrustResult.tsx` → advisor note | Bottom disclaimer changed from `home.disclaimer` to `results.advisor_note` — more specific: "This result reflects publicly visible security signals at the time of the scan. It is not a security audit." |
+| Old inline `isDangerous` what-to-do block | Removed from within the decision cards section — replaced by the standalone `GuidanceSection`. |
+
+---
+
+### 16.4 RTL Fix
+
+| File | Change |
+|---|---|
+| `TrustResult.tsx` | `dir="ltr"` added to the score ring flex container and to the `score_based_on` paragraph — prevents Arabic RTL context from reversing the score number layout |
+
+*(Documented in the previous commit; included here for completeness.)*
+
+---
+
+### 16.5 Auth — Forgot Password
+
+| File | Change |
+|---|---|
+| `AuthForm.tsx` | "Forgot password?" link added next to the password label in login mode — routes to `/[locale]/forgot-password` |
+| `en.json` + `ar.json` → `auth.forgot_password` | New key |
+| `en.json` + `ar.json` → `auth.forgot_password_coming_soon` | New key |
+| `frontend/src/app/[locale]/forgot-password/page.tsx` | New placeholder page (server component, same pattern as terms/privacy) |
+
+---
+
+### 16.6 Roadmap — Visitor-Friendly Intro
+
+| File | Change |
+|---|---|
+| `roadmap/page.tsx` | Added a plain-language intro card above the existing hero section |
+| `en.json` + `ar.json` → `roadmap.visitor_intro` | New `title` + `body` keys. Explains the product in one paragraph for non-technical visitors: what it does, who it is for, what it checks, and what the roadmap shows. |
+
+---
+
+### 16.7 What Was NOT Changed
+
+- No backend files modified (`backend/` diff: empty)
+- No API contracts changed
+- No scanner logic changed
+- No scoring algorithm changed
+- No auth or session changes
+- No new npm packages added (`package.json` unchanged)
+- No database migrations
+- No rate limiting changes
+- No raw headers, response bodies, IP addresses, or secrets exposed
+- No admin pages modified
+- No features outside the scope of message/copy polishing and minor component refinements
+
+---
+
+### 16.8 Build Results
+
+| Check | Result |
+|---|---|
+| `npx tsc --noEmit` | ✓ No errors |
+| `npm run build` | ✓ 24 pages compiled, 0 errors |
+| Backend diff | ✓ Zero files changed under `backend/` |
+| New dependencies | ✓ None added |
+
+---
+
+### 16.9 Known Gaps (Carried Forward)
+
+| Item | Notes |
+|---|---|
+| Terms/Privacy/Forgot-password content | All three are placeholders — full content required before public launch |
+| Password reset flow | Backend endpoint not yet implemented — deferred to post-beta |
+| Lighthouse audit score | Target ≥ 80 on mobile; not yet measured |
+| Bilingual review | Native Arabic speaker review recommended before beta |
+| Favicon | Still the default Next.js favicon |

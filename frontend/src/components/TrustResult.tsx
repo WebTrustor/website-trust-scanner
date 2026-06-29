@@ -109,18 +109,59 @@ function DecisionCard({
 }
 
 function DangerBanner({ t }: { t: ReturnType<typeof useTranslations> }) {
+  const checklist = t.raw('results.danger_banner.checklist') as string[]
   return (
-    <div className="bg-red-950/40 border border-red-800/60 rounded-2xl p-5 flex items-start gap-3.5">
-      <div className="flex-shrink-0 w-9 h-9 rounded-full bg-red-500/20 flex items-center justify-center mt-0.5">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-          <path d="M9 3L16.5 15H1.5L9 3Z" stroke="#f87171" strokeWidth="1.5" strokeLinejoin="round"/>
-          <path d="M9 8V11" stroke="#f87171" strokeWidth="1.75" strokeLinecap="round"/>
-          <circle cx="9" cy="13.5" r="0.75" fill="#f87171"/>
-        </svg>
+    <div className="bg-red-950/40 border border-red-800/60 rounded-2xl p-5 space-y-4">
+      <div className="flex items-start gap-3.5">
+        <div className="flex-shrink-0 w-9 h-9 rounded-full bg-red-500/20 flex items-center justify-center mt-0.5">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M9 3L16.5 15H1.5L9 3Z" stroke="#f87171" strokeWidth="1.5" strokeLinejoin="round"/>
+            <path d="M9 8V11" stroke="#f87171" strokeWidth="1.75" strokeLinecap="round"/>
+            <circle cx="9" cy="13.5" r="0.75" fill="#f87171"/>
+          </svg>
+        </div>
+        <div className="space-y-1">
+          <p className="text-red-400 font-semibold text-sm">{t('results.danger_banner.title')}</p>
+          <p className="text-slate-400 text-xs leading-relaxed">{t('results.danger_banner.body')}</p>
+        </div>
       </div>
-      <div className="space-y-1">
-        <p className="text-red-400 font-semibold text-sm">{t('results.danger_banner.title')}</p>
-        <p className="text-slate-400 text-xs leading-relaxed">{t('results.danger_banner.body')}</p>
+      <ul className="space-y-2 ps-2">
+        {checklist.map((item, i) => (
+          <li key={i} className="flex items-center gap-2.5 text-xs text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500/70 flex-shrink-0" aria-hidden="true" />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function GuidanceSection({
+  trustLevel,
+  isDangerous,
+  t,
+}: {
+  trustLevel: TrustReport['trust_level']
+  isDangerous: boolean
+  t: ReturnType<typeof useTranslations>
+}) {
+  const meansKey = `results.what_this_means.${trustLevel}` as Parameters<typeof t>[0]
+  const doKey = (isDangerous ? 'results.what_to_do.danger' : `results.what_to_do.${trustLevel}`) as Parameters<typeof t>[0]
+
+  return (
+    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+      <div className="space-y-1.5">
+        <p className="text-slate-400 text-xs uppercase tracking-wider font-medium">
+          {t('results.what_this_means.title')}
+        </p>
+        <p className="text-slate-300 text-sm leading-relaxed">{t(meansKey)}</p>
+      </div>
+      <div className="space-y-1.5 pt-3 border-t border-slate-800">
+        <p className="text-slate-400 text-xs uppercase tracking-wider font-medium">
+          {t('results.what_to_do.title')}
+        </p>
+        <p className="text-slate-300 text-sm leading-relaxed">{t(doKey)}</p>
       </div>
     </div>
   )
@@ -213,13 +254,10 @@ export default function TrustResult({
             <DecisionCard key={key} decisionKey={key} verdict={verdict} t={t} />
           ))}
         </div>
-        {isDangerous && (
-          <div className="pt-3 border-t border-slate-800">
-            <p className="text-xs font-semibold text-slate-400 mb-1">{t('results.what_to_do.title')}</p>
-            <p className="text-xs text-slate-500 leading-relaxed">{t('results.what_to_do.danger')}</p>
-          </div>
-        )}
       </div>
+
+      {/* Guidance — what this means + what to do — all trust levels */}
+      <GuidanceSection trustLevel={trust_level} isDangerous={isDangerous} t={t} />
 
       {/* Security Checks */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl">
@@ -265,7 +303,7 @@ export default function TrustResult({
       </div>
 
       <p className="text-slate-600 text-xs text-center leading-relaxed px-4 pb-2">
-        {t('home.disclaimer')}
+        {t('results.advisor_note')}
       </p>
     </div>
   )

@@ -251,6 +251,9 @@ export default function ScanForm({ apiUrl }: { apiUrl: string }) {
             </div>
           ))}
         </div>
+        <p className="text-slate-700 text-xs text-center leading-relaxed pt-1 px-2">
+          {t('home.trust_signals.note')}
+        </p>
       </div>
     </div>
   )

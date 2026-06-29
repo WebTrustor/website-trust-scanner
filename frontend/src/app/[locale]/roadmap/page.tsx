@@ -142,6 +142,12 @@ export default function RoadmapPage(_: {
       </header>
 
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12 space-y-10">
+        {/* Plain-language intro for visitors */}
+        <div className="bg-slate-900/60 border border-slate-800/60 rounded-xl p-5 space-y-2">
+          <p className="text-sm font-semibold text-slate-300">{t('visitor_intro.title')}</p>
+          <p className="text-slate-400 text-sm leading-relaxed">{t('visitor_intro.body')}</p>
+        </div>
+
         {/* Hero */}
         <div className="space-y-3">
           <h1 className="text-3xl font-bold text-slate-100">{t('headline')}</h1>
